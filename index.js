@@ -12,11 +12,13 @@ if (leadsFromLocalStorage) {
 }
 
 tabBtn.addEventListener("click", function () {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    myLeads.push(tabs[0].url);
+  async function getCurrentTab() {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    let [tab] = await chrome.tabs.query(queryOptions);
+    myLeads.push(tab);
     localStorage.setItem("myLeads", JSON.stringify(myLeads));
     render(myLeads);
-  });
+  }
 });
 
 function render(leads) {
